@@ -60,44 +60,127 @@ By inspecting this file I learned that:
 
 ## Part II) Data Processing
 *Summary of Workflow*
-1. Transpose the genotype data
-2. Join the transposed genotype data with snp positions file by `SNP_ID`
-3. Filter maize and teosinte data
-4. Separate by chromosome (1-10)
-5. Sort SNPs by position (increasing & decreasing)
-6. Handle missing data (NA) with "?" or "-"
-7. Extract SNPs with unknown or multiple positions
-8. Repeat for all chromosomes and groups
+1. Filter for maize (Group = ZMMIL, ZMMLR, and ZMMMR) & create new file
+→ take out `JG_OTU` column
+2. Filter for teosinte (Group = ZMPBA, ZMPIL, and ZMPJA) & create new file
+→ take out `JG_OTU` column
+3. Select for `SNP_ID`, `Chromosome`, and `Position` in `snp_position.txt` file
 
-*Transpose the genotype data*
+The following applies to both of the filtered files:
+4. Sort the data so join is aligned
+5. Transpose the genotype data
+6. Join the transposed genotype data with snp positions file by first column (want to keep extra columns ex: `Chromosome` & `Position`)
+7. Filter by chromosome (create a new file for each)
+8. Filter for SNPs w/ unknown positions (create 1 file)
+9. Filter for SNPs w/ multiple positions (create 1 file)
+
+The following applies to all chromosome files: 
+10. Ensure all missing data is formatted as “?/?”
+11. Sort SNPs by increasing position (create file) [10 files in total]
+12. Ensure all missing data is formatted as “-/-”
+13. Sort SNPs by decreasing position (create file) [10 files in total] 
+
+
+__Filter for maize (Group = ZMMIL, ZMMLR, and ZMMMR) & create new file__
+
 ```
-$ awk -f transpose.awk fang_et_al_genotypes.txt > transposed_genotypes.txt	# make transposed format of genotype data
-$ awk '{print $1}' transposed_genotypes.txt | sort | uniq	# ensure function was successful (should print unique row names aka SNP IDs)
+
 ```
-__Explanation__: This function transposed the `fang_et_al_genotypes.txt` file so that instead of the SNPs being columns headers, they were put into the first column as rows. The second line of code ensured that this code worked by printing out the unique rows in the first column, which should be the SNP markers as well as the `Group`, `JG_OTU`, and `Sample_ID` rows.  
+*Explanation*: 
 
-*Join the transposed genotype data with snp positions file by `SNP_ID`*
+
+__Filter for teosinte (Group = ZMPBA, ZMPIL, and ZMPJA) & create new file__
+
 ```
-# renaming `Sample_ID` to `SNP_ID`
-$ sed -i '1s/^Sample_ID/SNP_ID/' transposed_genotypes.txt
-$ head -n 1 transposed_genotypes.txt # verify 
 
-# sorting the datasets to ensure proper join
-$ sort -k1,1 transposed_genotypes.txt > transposed_genotypes_sorted.txt
-$ sort -k1,1 snp_position.txt > snp_position_sorted.txt
-
-# joining files
-join -1 1 -2 1 transposed_genotypes_sorted.txt snp_position_sorted.txt > joined_data.txt
-
-trial text
+```
+*Explanation*: 
 
 
-``` 
+__Select for `SNP_ID`, `Chromosome`, and `Position` in `snp_position.txt` file__
+
+```
+
+```
+*Explanation*: 
 
 
+__Transpose the genotype data__
+
+```
+
+```
+*Explanation*: 
 
 
+__Sort the data so join is aligned__
+
+```
+
+```
+*Explanation*: 
 
 
+__Join the transposed genotype data with snp positions file by first column__
 
+```
+
+```
+*Explanation*: 
+
+
+__Filter by chromosome__
+
+```
+
+```
+*Explanation*: 
+
+
+__Filter for SNPs w/ unknown positions__
+
+```
+
+```
+*Explanation*: 
+
+
+__Filter for SNPs w/ multiple positions (create 1 file)__
+
+```
+
+```
+*Explanation*: 
+
+
+__Ensure all missing data is formatted as “?/?” (Incr. position)__
+
+```
+
+```
+*Explanation*: 
+
+
+__Sort SNPs by increasing position (create file) [10 files in total]__
+
+```
+
+```
+*Explanation*: 
+
+
+__Ensure all missing data is formatted as “-/-” (Decr. position)__
+
+```
+
+```
+*Explanation*: 
+
+
+__Sort SNPs by decreasing position (create file) [10 files in total]__
+
+```
+
+```
+*Explanation*: 
 
