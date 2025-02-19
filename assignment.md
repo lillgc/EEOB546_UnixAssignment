@@ -67,6 +67,7 @@ By inspecting this file I learned that:
 3. Select for `SNP_ID`, `Chromosome`, and `Position` in `snp_position.txt` file
 
 The following applies to both of the filtered files:
+
 4. Sort the data so join is aligned
 5. Transpose the genotype data
 6. Join the transposed genotype data with snp positions file by first column (want to keep extra columns ex: `Chromosome` & `Position`)
@@ -74,7 +75,8 @@ The following applies to both of the filtered files:
 8. Filter for SNPs w/ unknown positions (create 1 file)
 9. Filter for SNPs w/ multiple positions (create 1 file)
 
-The following applies to all chromosome files: 
+The following applies to all chromosome files:
+ 
 10. Ensure all missing data is formatted as “?/?”
 11. Sort SNPs by increasing position (create file) [10 files in total]
 12. Ensure all missing data is formatted as “-/-”
