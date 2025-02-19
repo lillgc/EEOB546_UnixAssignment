@@ -71,9 +71,24 @@ By inspecting this file I learned that:
 
 *Transpose the genotype data*
 ```
-$ awk -f transpose.awk fang_et_al_genotypes.txt > transposed_genotypes.txt
+$ awk -f transpose.awk fang_et_al_genotypes.txt > transposed_genotypes.txt	# make transposed format of genotype data
+$ awk '{print $1}' transposed_genotypes.txt | sort | uniq	# ensure function was successful (should print unique row names aka SNP IDs)
+
+# noticed other column names still present in the list
+$ awk '$1 != "Group" && $1 != "JG_OTU" && $1 != "Sample_ID"' transposed_genotypes.txt > cleaned_transposed_genotypes.txt
+
 ```
-__Explanation__:  
+__Explanation__: This function transposed the `fang_et_al_genotypes.txt` file so that instead of the SNPs being columns headers, they were put into the first column as rows. The second line of code ensured that this code worked by printing out the unique rows in the first column, which should be the SNP markers. The third code takes out the `Group` and `JG_OTU` rows out, because I forgot to take them out earlier.  
+
+*Join the transposed genotype data with snp positions file by `SNP_ID`*
+```
+# adding `SNP_ID` column header to `transposed_genotypes.txt`
+$ awk '{print $1}' cleaned_transposed_genotypes.txt | sort | uniq
+
+# sorting the datasets to ensure proper join
+$ (head -n 1 snp_position.txt && tail -n +2 snp_position.txt | sort) > sorted_snp_position.txt
+$ (head -n 1 cleaned_transposed_genotypes.txt && tail -n +2 cleaned_transposed_genotypes.txt | sort) > sorted_transposed_genotypes.txt
+``` 
 
 
 
