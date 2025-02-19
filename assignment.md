@@ -86,7 +86,7 @@ The following applies to all chromosome files:
 __Filter for maize (Group = ZMMIL, ZMMLR, and ZMMMR) & create new file__
 
 ```
-
+awk '$3 ~ /ZMMIL|ZMMLR|ZMMMR/' fang_et_al_genotypes.txt > maize_genotypes.txt
 ```
 *Explanation*: 
 
@@ -94,7 +94,7 @@ __Filter for maize (Group = ZMMIL, ZMMLR, and ZMMMR) & create new file__
 __Filter for teosinte (Group = ZMPBA, ZMPIL, and ZMPJA) & create new file__
 
 ```
-
+awk '$3 ~ /ZMPBA|ZMPIL|ZMPJA/' fang_et_al_genotypes.txt > teosinte_genotypes.txt
 ```
 *Explanation*: 
 
