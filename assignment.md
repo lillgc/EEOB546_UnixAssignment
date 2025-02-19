@@ -89,7 +89,7 @@ $ sort -k1,1 snp_position.txt > snp_position_sorted.txt
 # joining files
 join -1 1 -2 1 transposed_genotypes_sorted.txt snp_position_sorted.txt > joined_data.txt
 
-
+trial text
 
 
 ``` 
