@@ -51,7 +51,7 @@ $ file snp_position.txt
 
 By inspecting this file I learned that:
 
-* The initial look into the data file shows the first 5 and last 5 lines of the file. From this inspection, it can be gathered that the first row of the file contains column names (`SNP_ID`, `cdv_marker_id`, `Chromosome`, `Position`, `alt_pos`, `mult_positions`,	`amplicon`, etc.). The unique identifiers for the SNP markers in `SNP_ID` appear to match the SNP markers found as column names in the `fang_et_al_genotypes.txt` file. The `Chromosome` includes where the SNP is located. Many of the columns do not contain data in the dataset and spaces are left blank. 
+* The initial look into the data file shows the first 5 and last 5 lines of the file. From this inspection, it can be gathered that the first row of the file contains column names (`SNP_ID`, `cdv_marker_id`, `Chromosome`, `Position`, `alt_pos`, `mult_positions`,	`amplicon`, etc.). The unique identifiers for the SNP markers in `SNP_ID` appear to match the SNP markers found as column names in the `fang_et_al_genotypes.txt` file. The `Chromosome` includes which chromosome the SNP is located on. The `Position` column is the position of the SNP on the chromosome. There are multiple other columns containing data that do not appear relevant to this analysis. 
 	* There are 10 chromosomes. Some SNPs have multiple positions on multiple chromosomes. Some SNPs have unknown positions. 
 * The file details code shows that the `snp_position` file is 84 K; there are 984 lines present; there are 13198 words present; there are 15 columns in the dataset.
 * Before data processing begins, the identification of non-ASCII files/characters code was performed, which revealed the file only contained standard text characters
@@ -90,7 +90,6 @@ $ sort -k1,1 snp_position.txt > snp_position_sorted.txt
 join -1 1 -2 1 transposed_genotypes_sorted.txt snp_position_sorted.txt > joined_data.txt
 
 
-trial text
 
 
 ``` 
