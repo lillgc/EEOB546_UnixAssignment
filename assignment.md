@@ -7,19 +7,19 @@
 
 ```
 # initial look
-(head -n 5; tail -n 5) < fang_et_al_genotypes.txt
+$ (head -n 5; tail -n 5) < fang_et_al_genotypes.txt
 
 # unique groups
-cut -f 3 fang_et_al_genotypes.txt | sort | uniq -c
+$ cut -f 3 fang_et_al_genotypes.txt | sort | uniq -c
 
 # file details (file size, # of lines, # of words, # of columns)
-du -h fang_et_al_genotypes.txt				# file size
-wc -l fang_et_al_genotypes.txt          		# number of lines
-wc -w fang_et_al_genotypes.txt                   	# number of words
-awk '{print NF}' fang_et_al_genotypes.txt | head -1  	# number of columns
+$ du -h fang_et_al_genotypes.txt				# file size
+$ wc -l fang_et_al_genotypes.txt          		# number of lines
+$ wc -w fang_et_al_genotypes.txt                   	# number of words
+$ awk '{print NF}' fang_et_al_genotypes.txt | head -1  	# number of columns
 
 # identification of non-ASCII files and characters
-file fang_et_al_genotypes.txt 
+$ file fang_et_al_genotypes.txt 
 ```
 
 By inspecting this file I learned that:
@@ -34,19 +34,19 @@ By inspecting this file I learned that:
 
 ```
 # initial look
-(head -n 5; tail -n 5) < snp_position.txt
+$ (head -n 5; tail -n 5) < snp_position.txt
 
 # unique chromosomes
-cut -f 3 snp_position.txt | sort | uniq -c
+$ cut -f 3 snp_position.txt | sort | uniq -c
 
 # file details (file size, # of lines, # of words, # of columns)
-du -h snp_position.txt                          # file size
-wc -l snp_position.txt                          # number of lines
-wc -w snp_position.txt                          # number of words
-awk '{print NF}' snp_position.txt | head -1     # number of columns
+$ du -h snp_position.txt                          # file size
+$ wc -l snp_position.txt                          # number of lines
+$ wc -w snp_position.txt                          # number of words
+$ awk '{print NF}' snp_position.txt | head -1     # number of columns
 
 # identification of non-ASCII files and characters
-file snp_position.txt
+$ file snp_position.txt
 ```
 
 By inspecting this file I learned that:
@@ -58,13 +58,22 @@ By inspecting this file I learned that:
 
 
 
-   
+## Part II) Data Processing
+*Summary of Workflow*
+1. Transpose the genotype data
+2. Join the transposed genotype data with snp positions file by `SNP_ID`
+3. Filter maize and teosinte data
+4. Separate by chromosome (1-10)
+5. Sort SNPs by position (increasing & decreasing)
+6. Handle missing data (NA) with "?" or "-"
+7. Extract SNPs with unknown or multiple positions
+8. Repeat for all chromosomes and groups
 
-
-
-
-
-
+*Transpose the genotype data*
+```
+$ awk -f transpose.awk fang_et_al_genotypes.txt > transposed_genotypes.txt
+```
+__Explanation__:  
 
 
 
