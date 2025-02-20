@@ -205,7 +205,7 @@ for i in {2..10}; do
 done
 awk '{print $2, $3}' teosinte_chr6_desc.txt #check
 ```
-*Explanation*: The first commands (for maize and teosinte) filter by chromosome (column 2), convert the missing data to their proper form (?/? for ascending and -/- for descending), sort in either ascending or descending order (header maintained at top for descending through additional code), and finally save work as a new file. The second commands check success. The for loop then completes the same functions for all remaining chromosomes.   
+*Explanation*: The first commands (for maize and teosinte) filter by chromosome (column 2) and filter out when the position is unknown or multiple (column 3), convert the missing data to their proper form (?/? for ascending and -/- for descending), sort in either ascending or descending order (header maintained at top for descending through additional code), and finally save work as a new file. The second commands check success. The for loop then completes the same functions for all remaining chromosomes.   
 
 
 __Filter for SNPs w/ unknown positions__
