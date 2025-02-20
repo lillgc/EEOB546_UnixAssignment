@@ -176,23 +176,24 @@ __Filter for SNPs w/ unknown positions__
 
 ```
 # maize
-awk -F'\t' 'NR==1 || $2 == "unknown"' merged_maize_data.txt > maize_unknown_positions.txt
+awk -F'\t' 'NR==1 || $3 == "unknown"' merged_maize_data.txt > maize_unknown_positions.txt
 
 # teosinte
-awk -F'\t' 'NR==1 || $2 == "unknown"' merged_teosinte_data.txt > teosinte_unknown_positions.txt
+awk -F'\t' 'NR==1 || $3 == "unknown"' merged_teosinte_data.txt > teosinte_unknown_positions.txt
 ```
+*Explanation*: These commands keep the column heads and then create a new file with rows where column 3 (`Position`) is equal to unknown, representing unknown positions in the genome.
 
 
 __Filter for SNPs w/ multiple positions__
 
 ```
 # maize
-awk -F'\t' 'NR==1 || $2 == "multiple"' merged_maize_data.txt > maize_multiple_positions.txt
+awk -F'\t' 'NR==1 || $3 == "multiple"' merged_maize_data.txt > maize_multiple_positions.txt
 
 # teosinte
-awk -F'\t' 'NR==1 || $2 == "multiple"' merged_teosinte_data.txt > teosinte_multiple_positions.txt
+awk -F'\t' 'NR==1 || $3 == "multiple"' merged_teosinte_data.txt > teosinte_multiple_positions.txt
 ```
-
+*Explanation*: These commands keep the column heads and then create a new file with rows where column 3 (`Position`) is equal to mulitple, representing multiple positions in the genome.
 
 
 
