@@ -86,7 +86,9 @@ The following applies to all chromosome files:
 __Filter for maize (Group = ZMMIL, ZMMLR, and ZMMMR) & create new file__
 
 ```
-awk '$3 ~ /ZMMIL|ZMMLR|ZMMMR/' fang_et_al_genotypes.txt > maize_genotypes.txt
+awk 'NR==1 || $3 ~ /ZMMIL|ZMMLR|ZMMMR/' fang_et_al_genotypes.txt > maize_genotypes.txt
+wc -l maize_genotypes.txt  #1573 
+cut -d $'\t' --complement -f2,3 maize_genotypes.txt > maize_clean_genotype.txt
 ```
 *Explanation*: 
 
@@ -94,7 +96,9 @@ awk '$3 ~ /ZMMIL|ZMMLR|ZMMMR/' fang_et_al_genotypes.txt > maize_genotypes.txt
 __Filter for teosinte (Group = ZMPBA, ZMPIL, and ZMPJA) & create new file__
 
 ```
-awk '$3 ~ /ZMPBA|ZMPIL|ZMPJA/' fang_et_al_genotypes.txt > teosinte_genotypes.txt
+awk 'NR==1 || $3 ~ /ZMPBA|ZMPIL|ZMPJA/' fang_et_al_genotypes.txt > teosinte_genotypes.txt
+wc -l teosinte_genotypes.txt  #975
+cut -d $'\t' --complement -f2,3 teosinte_genotypes.txt > teosinte_clean_genotype.txt
 ```
 *Explanation*: 
 
@@ -102,7 +106,7 @@ awk '$3 ~ /ZMPBA|ZMPIL|ZMPJA/' fang_et_al_genotypes.txt > teosinte_genotypes.txt
 __Select for `SNP_ID`, `Chromosome`, and `Position` in `snp_position.txt` file__
 
 ```
-
+awk -F'\t' 'BEGIN {OFS="\t"} { print $1, $3, $4 }' snp_position.txt > snp_position_clean.txt
 ```
 *Explanation*: 
 
@@ -110,7 +114,11 @@ __Select for `SNP_ID`, `Chromosome`, and `Position` in `snp_position.txt` file__
 __Transpose the genotype data__
 
 ```
+# maize
+awk -F'\t' -f transpose.awk maize_clean_genotype.txt > transposed_maize_genotypes.txt
 
+# teosinte
+awk -F'\t' -f transpose.awk teosinte_clean_genotype.txt > transposed_teosinte_genotypes.txt
 ```
 *Explanation*: 
 
@@ -118,6 +126,24 @@ __Transpose the genotype data__
 __Sort the data so join is aligned__
 
 ```
+# snp
+head -n 1 snp_position_clean.txt > snp_position_clean_header.txt                #extracting header
+tail -n +2 snp_position_clean.txt | sort -k1,1 > snp_position_clean_sorted.txt  #sorting data w/o headers
+cat snp_position_clean_header.txt snp_position_clean_sorted.txt > snp_position_for_join.txt     #reassembly
+
+# maize
+head -n 1 transposed_maize_genotypes.txt > transposed_maize_genotype_header.txt                  #extracting header
+tail -n +2 transposed_maize_genotypes.txt | sort -k1,1 > transposed_maize_genotype_sorted.txt    #sorting data w/o headers
+cat transposed_maize_genotype_header.txt transposed_maize_genotype_sorted.txt > maize_for_join.txt
+
+# teosinte
+head -n 1 transposed_teosinte_genotypes.txt > transposed_teosinte_genotype_header.txt   # Extracting header
+tail -n +2 transposed_teosinte_genotypes.txt | sort -k1,1 > transposed_teosinte_genotype_sorted.txt   # Sorting data w/o headers
+cat transposed_teosinte_genotype_header.txt transposed_teosinte_genotype_sorted.txt > teosinte_for_join.txt   # Combining header with sorted data
+
+# `Sample_ID` to `SNP_ID`
+sed -i '1s/^Sample_ID/SNP_ID/' maize_for_join.txt 
+sed -i '1s/^Sample_ID/SNP_ID/' teosinte_for_join.txt
 
 ```
 *Explanation*: 
@@ -126,7 +152,11 @@ __Sort the data so join is aligned__
 __Join the transposed genotype data with snp positions file by first column__
 
 ```
+# maize
+join -t $'\t' -1 1 -2 1 -a 1 snp_position_for_join.txt maize_for_join.txt > merged_maize_data.txt
 
+# teosinte
+join -t $'\t' -1 1 -2 1 -a 1 snp_position_for_join.txt teosinte_for_join.txt > merged_teosinte_data.txt
 ```
 *Explanation*: 
 
@@ -185,4 +215,6 @@ __Sort SNPs by decreasing position (create file) [10 files in total]__
 
 ```
 *Explanation*: 
+
+
 
