@@ -164,6 +164,10 @@ __Filter by chromosome__
 
 ```
 
+
+
+
+
 ```
 *Explanation*: 
 
@@ -171,49 +175,25 @@ __Filter by chromosome__
 __Filter for SNPs w/ unknown positions__
 
 ```
+# maize
+awk -F'\t' '$2 == "unknown"' merged_maize_data.txt > maize_unknown_positions.txt
 
-```
-*Explanation*: 
-
-
-__Filter for SNPs w/ multiple positions (create 1 file)__
-
+# teosinte
+awk -F'\t' '$2 == "unknown"' merged_teosinte_data.txt > teosinte_unknown_positions.txt
 ```
 
-```
-*Explanation*: 
 
-
-__Ensure all missing data is formatted as “?/?” (Incr. position)__
+__Filter for SNPs w/ multiple positions__
 
 ```
+# maize
+awk -F'\t' '$2 == "multiple"' merged_maize_data.txt > maize_multiple_positions.txt
 
-```
-*Explanation*: 
-
-
-__Sort SNPs by increasing position (create file) [10 files in total]__
-
+# teosinte
+awk -F'\t' '$2 == "multiple"' merged_teosinte_data.txt > teosinte_multiple_positions.txt
 ```
 
-```
-*Explanation*: 
 
-
-__Ensure all missing data is formatted as “-/-” (Decr. position)__
-
-```
-
-```
-*Explanation*: 
-
-
-__Sort SNPs by decreasing position (create file) [10 files in total]__
-
-```
-
-```
-*Explanation*: 
 
 
 
