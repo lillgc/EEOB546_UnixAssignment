@@ -90,7 +90,7 @@ awk 'NR==1 || $3 ~ /ZMMIL|ZMMLR|ZMMMR/' fang_et_al_genotypes.txt > maize_genotyp
 wc -l maize_genotypes.txt  #1573 
 cut -d $'\t' --complement -f2,3 maize_genotypes.txt > maize_clean_genotype.txt
 ```
-*Explanation*: 
+*Explanation*: I decided to filter the maize groups and put the data into a separate file so I wouldn't have to filter after transposing. The first line keeps the first row (the column headers), looks through the 3rd column for the group name strings in the `fang_et_al_genotypes.txt` file, and makes a new file `maize_genotypes.txt`. The third line removes column 2 & 3, since those are no longer necessary for this particular analysis. 
 
 
 __Filter for teosinte (Group = ZMPBA, ZMPIL, and ZMPJA) & create new file__
@@ -100,7 +100,7 @@ awk 'NR==1 || $3 ~ /ZMPBA|ZMPIL|ZMPJA/' fang_et_al_genotypes.txt > teosinte_geno
 wc -l teosinte_genotypes.txt  #975
 cut -d $'\t' --complement -f2,3 teosinte_genotypes.txt > teosinte_clean_genotype.txt
 ```
-*Explanation*: 
+*Explanation*: Same explanation as filtering for maize, but with the teosinte groups.
 
 
 __Select for `SNP_ID`, `Chromosome`, and `Position` in `snp_position.txt` file__
@@ -108,7 +108,7 @@ __Select for `SNP_ID`, `Chromosome`, and `Position` in `snp_position.txt` file__
 ```
 awk -F'\t' 'BEGIN {OFS="\t"} { print $1, $3, $4 }' snp_position.txt > snp_position_clean.txt
 ```
-*Explanation*: 
+*Explanation*: Since the `snp_position.txt` has a lot of extra information, I filtered for only the necessary columns: `SNP_ID`, `Chromosome`, `Position`. The `'BEGIN {OFS="\t"}` code ensures the new file `snp_position_clean.txt` stays in tab delimited format (or the join command will break)
 
 
 __Transpose the genotype data__
@@ -120,7 +120,7 @@ awk -F'\t' -f transpose.awk maize_clean_genotype.txt > transposed_maize_genotype
 # teosinte
 awk -F'\t' -f transpose.awk teosinte_clean_genotype.txt > transposed_teosinte_genotypes.txt
 ```
-*Explanation*: 
+*Explanation*: These commands transpose the filtered genotype files using the transpose.awk script. 
 
 
 __Sort the data so join is aligned__
@@ -144,9 +144,8 @@ cat transposed_teosinte_genotype_header.txt transposed_teosinte_genotype_sorted.
 # `Sample_ID` to `SNP_ID`
 sed -i '1s/^Sample_ID/SNP_ID/' maize_for_join.txt 
 sed -i '1s/^Sample_ID/SNP_ID/' teosinte_for_join.txt
-
 ```
-*Explanation*: 
+*Explanation*: These commands remove and save the headers of the files, sort the SNPs, and reassemble the file. For a clean join, the `Sample_ID` is renamed to `SNP_ID` to represent the rows underneath the column. 
 
 
 __Join the transposed genotype data with snp positions file by first column__
@@ -158,7 +157,7 @@ join -t $'\t' -1 1 -2 1 -a 1 snp_position_for_join.txt maize_for_join.txt > merg
 # teosinte
 join -t $'\t' -1 1 -2 1 -a 1 snp_position_for_join.txt teosinte_for_join.txt > merged_teosinte_data.txt
 ```
-*Explanation*: 
+*Explanation*: These commands join the `snp_position.txt` file with the genotype files so that the merged files will contain SNP IDs with chromosome, position, and sample genotype data.
 
 
 __Filter by chromosome__
