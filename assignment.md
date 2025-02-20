@@ -163,7 +163,7 @@ join -t $'\t' -1 1 -2 1 -a 1 snp_position_for_join.txt teosinte_for_join.txt > m
 __Filter by chromosome__
 
 ```
-# maize
+# maize ascending
 awk -F'\t' 'NR==1 || $2 == "1" {gsub(/NA/, "?/?"); gsub(/\?\/\?/, "?/?"); print}' merged_maize_data.txt | sort -k3,3n > maize_chr1_asc.txt #1
 awk '{print $2, $3}' maize_chr1_asc.txt #check
 
@@ -172,7 +172,17 @@ for i in {2..10}; do
 done
 awk '{print $2, $3}' maize_chr4_asc.txt #check
 
-# teosinte
+# maize descending
+awk -F'\t' 'NR==1 || $2 == "1" {gsub(/NA/, "?/?"); gsub(/\?\/\?/, "-/-"); print}' merged_maize_data.txt | sort -k3,3nr > maize_chr1_desc.txt #1
+awk '{print $2, $3}' maize_chr1_desc.txt #check
+
+for i in {2..10}; do
+    awk -F'\t' 'NR==1 || $2 == "'$i'" {gsub(/NA/, "?/?"); gsub(/\?\/\?/, "-/-"); print}' merged_maize_data.txt | sort -k3,3nr > maize_chr"${i}"_desc.txt
+done
+awk '{print $2, $3}' maize_chr4_desc.txt #check
+
+
+# teosinte ascending
 (head -n 1 merged_teosinte_data.txt && tail -n +2 merged_teosinte_data.txt | awk -F'\t' '$2 == "1" {gsub(/NA/, "?/?"); gsub(/\?\/\?/, "-/-"); print}' | sort -k3,3nr) > teosinte_chr1_desc.txt #1
 awk '{print $2, $3}' teosinte_chr1_desc.txt #check
 
@@ -180,8 +190,17 @@ for i in {2..10}; do
     (head -n 1 merged_teosinte_data.txt && tail -n +2 merged_teosinte_data.txt | awk -F'\t' '$2 == "'$i'" {gsub(/NA/, "?/?"); gsub(/\?\/\?/, "-/-"); print}' | sort -k3,3nr) > teosinte_chr"${i}"_desc.txt
 done
 awk '{print $2, $3}' teosinte_chr6_desc.txt #check
+
+# teosinte descending
+awk -F'\t' 'NR==1 || $2 == "1" {gsub(/NA/, "?/?"); gsub(/\?\/\?/, "?/?"); print}' merged_teosinte_data.txt | sort -k3,3n > teosinte_chr1_asc.txt #1
+awk '{print $2, $3}' teosinte_chr1_asc.txt #check
+
+for i in {2..10}; do
+    awk -F'\t' 'NR==1 || $2 == "'$i'" {gsub(/NA/, "?/?"); gsub(/\?\/\?/, "?/?"); print}' merged_teosinte_data.txt | sort -k3,3n > teosinte_chr"${i}"_asc.txt
+Done
+awk '{print $2, $3}' teosinte_chr10_asc.txt #check
 ```
-*Explanation*: The first commands (for maize and teosinte) filter by chromosome (column 2), convert the missing data to their proper form (?/? for maize and -/- for teosinte), sort in either ascending or descending order (header maintained at top for teosinte through additional code), and finally save work as a new file. The second commands check success. The for loop then completes the same functions for all remaining chromosomes.   
+*Explanation*: The first commands (for maize and teosinte) filter by chromosome (column 2), convert the missing data to their proper form (?/? for ascending and -/- for descending), sort in either ascending or descending order (header maintained at top for descending through additional code), and finally save work as a new file. The second commands check success. The for loop then completes the same functions for all remaining chromosomes.   
 
 
 __Filter for SNPs w/ unknown positions__
