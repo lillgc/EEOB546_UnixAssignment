@@ -163,13 +163,25 @@ join -t $'\t' -1 1 -2 1 -a 1 snp_position_for_join.txt teosinte_for_join.txt > m
 __Filter by chromosome__
 
 ```
+# maize
+awk -F'\t' 'NR==1 || $2 == "1" {gsub(/NA/, "?/?"); gsub(/\?\/\?/, "?/?"); print}' merged_maize_data.txt | sort -k3,3n > maize_chr1_asc.txt #1
+awk '{print $2, $3}' maize_chr1_asc.txt #check
 
+for i in {2..10}; do
+    awk -F'\t' 'NR==1 || $2 == "'$i'" {gsub(/NA/, "?/?"); gsub(/\?\/\?/, "?/?"); print}' merged_maize_data.txt | sort -k3,3n > maize_chr"${i}"_asc.txt
+done
+awk '{print $2, $3}' maize_chr4_asc.txt #check
 
+# teosinte
+(head -n 1 merged_teosinte_data.txt && tail -n +2 merged_teosinte_data.txt | awk -F'\t' '$2 == "1" {gsub(/NA/, "?/?"); gsub(/\?\/\?/, "-/-"); print}' | sort -k3,3nr) > teosinte_chr1_desc.txt #1
+awk '{print $2, $3}' teosinte_chr1_desc.txt #check
 
-
-
+for i in {2..10}; do
+    (head -n 1 merged_teosinte_data.txt && tail -n +2 merged_teosinte_data.txt | awk -F'\t' '$2 == "'$i'" {gsub(/NA/, "?/?"); gsub(/\?\/\?/, "-/-"); print}' | sort -k3,3nr) > teosinte_chr"${i}"_desc.txt
+done
+awk '{print $2, $3}' teosinte_chr6_desc.txt #check
 ```
-*Explanation*: 
+*Explanation*: The first commands (for maize and teosinte) filter by chromosome (column 2), convert the missing data to their proper form (?/? for maize and -/- for teosinte), sort in either ascending or descending order (header maintained at top for teosinte through additional code), and finally save work as a new file. The second commands check success. The for loop then completes the same functions for all remaining chromosomes.   
 
 
 __Filter for SNPs w/ unknown positions__
@@ -194,7 +206,5 @@ awk -F'\t' 'NR==1 || $3 == "multiple"' merged_maize_data.txt > maize_multiple_po
 awk -F'\t' 'NR==1 || $3 == "multiple"' merged_teosinte_data.txt > teosinte_multiple_positions.txt
 ```
 *Explanation*: These commands keep the column heads and then create a new file with rows where column 3 (`Position`) is equal to mulitple, representing multiple positions in the genome.
-
-
 
 
