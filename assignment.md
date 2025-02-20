@@ -176,10 +176,10 @@ __Filter for SNPs w/ unknown positions__
 
 ```
 # maize
-awk -F'\t' '$2 == "unknown"' merged_maize_data.txt > maize_unknown_positions.txt
+awk -F'\t' 'NR==1 || $2 == "unknown"' merged_maize_data.txt > maize_unknown_positions.txt
 
 # teosinte
-awk -F'\t' '$2 == "unknown"' merged_teosinte_data.txt > teosinte_unknown_positions.txt
+awk -F'\t' 'NR==1 || $2 == "unknown"' merged_teosinte_data.txt > teosinte_unknown_positions.txt
 ```
 
 
@@ -187,10 +187,10 @@ __Filter for SNPs w/ multiple positions__
 
 ```
 # maize
-awk -F'\t' '$2 == "multiple"' merged_maize_data.txt > maize_multiple_positions.txt
+awk -F'\t' 'NR==1 || $2 == "multiple"' merged_maize_data.txt > maize_multiple_positions.txt
 
 # teosinte
-awk -F'\t' '$2 == "multiple"' merged_teosinte_data.txt > teosinte_multiple_positions.txt
+awk -F'\t' 'NR==1 || $2 == "multiple"' merged_teosinte_data.txt > teosinte_multiple_positions.txt
 ```
 
 
